@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Anamorphic Desqueezer Web App - Fix aspect ratio of your anamorphic photos instantly in-browser." />
+  <title>Anamorphic Desqueezer - Web Version</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #111; color: #fff; }
+    header { background: #1a1a1a; padding: 20px; text-align: center; }
+    header h1 { margin: 0; font-size: 2.2em; }
+    .container { max-width: 960px; margin: 40px auto; padding: 0 20px; }
+    h2 { color: #0ff; }
+    .section { margin-top: 40px; }
+    .screenshot, canvas { width: 100%; max-width: 600px; margin: 10px auto; display: block; border-radius: 8px; }
+    footer { background: #1a1a1a; text-align: center; padding: 20px; font-size: 0.9em; color: #aaa; }
+    .upload-btn { display: inline-block; margin-top: 20px; }
+    .cta a, .cta button { display: inline-block; background: #0ff; color: #000; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; cursor: pointer; border: none; }
+    .cta a:hover, .cta button:hover { background: #0cc; }
+    ul { line-height: 1.8; }
+    button { margin: 8px; padding: 10px 16px; font-size: 1em; border: none; border-radius: 6px; cursor: pointer; background: #0ff; color: #000; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Anamorphic Desqueezer</h1>
+    <p>Desqueeze your images in the browser (3 free uses)</p>
+  </header>
+
+  <div class="container">
+    <section class="section">
+      <h2>Upload an Image</h2>
+      <input type="file" accept="image/*" id="upload" class="upload-btn" />
+      <br />
+      <div id="desqueezeButtons">
+        <button onclick="applyDesqueeze(1.33)">Desqueeze 1.33x</button>
+        <button onclick="applyDesqueeze(1.55)">Desqueeze 1.55x</button>
+        <button onclick="applyDesqueeze(2.0)">Desqueeze 2.0x</button>
+      </div>
+      <canvas id="canvas" class="hidden"></canvas>
+      <a id="downloadLink" class="cta hidden" download="desqueezed.jpg">Download Desqueezed Image</a>
+      <div id="buyNow" class="cta hidden">
+        <button onclick="startCheckout()">Unlock Unlimited Access (₹300)</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Notice</h2>
+      <p>You get 3 free uses. After that, please unlock the web tool for unlimited access via Stripe.</p>
+    </section>
+
+    <section class="section">
+      <h2>Privacy & Terms</h2>
+      <p>Everything runs locally in your browser. Your images are never uploaded or stored.</p>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2025 Anamorphic Desqueezer Web | For content creators & filmmakers
+  </footer>
+
+  <script>
+    let useCount = parseInt(localStorage.getItem('desqueezeUses')) || 0;
+    const maxFreeUses = 3;
+    let isPaid = localStorage.getItem('desqueezePaid') === 'yes';
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const uploadInput = document.getElementById('upload');
+    const downloadLink = document.getElementById('downloadLink');
+    const buyNow = document.getElementById('buyNow');
+    const desqueezeButtons = document.getElementById('desqueezeButtons');
+
+    let img = new Image();
+
+    uploadInput.onchange = function(e) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          canvas.classList.remove('hidden');
+        }
+        img.src = event.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    function applyDesqueeze(factor) {
+      if (!img.src) return;
+
+      if (!isPaid && useCount >= maxFreeUses) {
+        desqueezeButtons.classList.add('hidden');
+        buyNow.classList.remove('hidden');
+        alert("Free limit reached. Please unlock full version.");
+        return;
+      }
+
+      const newWidth = img.width * factor;
+      const newHeight = img.height;
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      ctx.setTransform(factor, 0, 0, 1, 0, 0);
+      ctx.drawImage(img, 0, 0);
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+      downloadLink.href = dataUrl;
+      downloadLink.classList.remove('hidden');
+
+      if (!isPaid) {
+        useCount++;
+        localStorage.setItem('desqueezeUses', useCount);
+      }
+    }
+
+    function startCheckout() {
+      const stripe = Stripe("pk_live_REPLACE_WITH_YOUR_KEY");
+      stripe.redirectToCheckout({
+        lineItems: [{price: "price_REPLACE_WITH_YOUR_PRICE_ID", quantity: 1}],
+        mode: "payment",
+        successUrl: window.location.href + '?success=true',
+        cancelUrl: window.location.href
+      });
+    }
+
+    if (window.location.href.includes('success=true')) {
+      localStorage.setItem('desqueezePaid', 'yes');
+      isPaid = true;
+      alert("Thanks for unlocking full access!");
+    }
+  </script>
+</body>
+</html>
