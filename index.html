@@ -2,115 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Anamorphic Desqueezer Web App - Fix aspect ratio of your anamorphic photos instantly in-browser." />
-  <title>Anamorphic Desqueezer - Web Version</title>
-  <script src="https://js.stripe.com/v3/"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Squeezer - Anamorphic Desqueeze & Simulation</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #111; color: #fff; }
-    header { background: #1a1a1a; padding: 20px; text-align: center; }
-    header h1 { margin: 0; font-size: 2.2em; }
-    .container { max-width: 960px; margin: 40px auto; padding: 0 20px; }
-    h2 { color: #0ff; }
-    .section { margin-top: 40px; }
-    .screenshot, canvas { width: 100%; max-width: 600px; margin: 10px auto; display: block; border-radius: 8px; }
-    footer { background: #1a1a1a; text-align: center; padding: 20px; font-size: 0.9em; color: #aaa; }
-    .upload-btn { display: inline-block; margin-top: 20px; }
-    .cta a, .cta button { display: inline-block; background: #0ff; color: #000; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; cursor: pointer; border: none; }
-    .cta a:hover, .cta button:hover { background: #0cc; }
-    ul { line-height: 1.8; }
-    button { margin: 8px; padding: 10px 16px; font-size: 1em; border: none; border-radius: 6px; cursor: pointer; background: #0ff; color: #000; }
-    .hidden { display: none; }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #222;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Anamorphic Desqueezer</h1>
-    <p>Desqueeze your images in the browser — Unlock for ₹300</p>
+    <h1>Squeezer</h1>
+    <p>Desqueeze Videos & Images, or Simulate Anamorphic Footage</p>
   </header>
 
   <div class="container">
-    <section class="section">
-      <h2>Upload an Image</h2>
-      <input type="file" accept="image/*" id="upload" class="upload-btn" />
-      <br />
-      <div id="desqueezeButtons">
-        <button onclick="applyDesqueeze(1.33)">Desqueeze 1.33x</button>
-        <button onclick="applyDesqueeze(1.55)">Desqueeze 1.55x</button>
-        <button onclick="applyDesqueeze(2.0)">Desqueeze 2.0x</button>
-      </div>
-      <canvas id="canvas" class="hidden"></canvas>
-      <a id="downloadLink" class="cta hidden" download="desqueezed.jpg">Download Desqueezed Image</a>
-      <div id="buyNow" class="cta">
-        <button onclick="startCheckout()">Unlock Unlimited Access (₹300)</button>
-      </div>
-    </section>
+    <h2>About Squeezer</h2>
+    <p>
+      <strong>Squeezer</strong> is your all-in-one mobile tool for working with anamorphic visuals. Whether you're desqueezing actual anamorphic content or simulating the look, Squeezer has you covered:
+    </p>
+    <ul>
+      <li><strong>🎬 Anamorphic Desqueeze (Video)</strong> – Fix horizontal squeeze caused by anamorphic lenses (1.33x, 1.55x, 2.0x).</li>
+      <li><strong>🧪 Anamorphic Simulation</strong> – Apply vertical stretch to simulate anamorphic compression from normal footage.</li>
+      <li><strong>🖼️ Image Desqueeze</strong> – Stretch squeezed photos shot with anamorphic lenses back to correct proportions.</li>
+    </ul>
 
-    <section class="section">
-      <h2>Example Desqueezed Images</h2>
-      <img src="desqueezed_sample1.jpg" alt="Desqueezed 1.33x" class="screenshot">
-      <img src="desqueezed_sample2.jpg" alt="Desqueezed 1.55x" class="screenshot">
-      <img src="desqueezed_sample3.jpg" alt="Desqueezed 2.0x" class="screenshot">
-    </section>
+    <h2>Features</h2>
+    <ul>
+      <li>Real-time OpenGL preview of video transformations</li>
+      <li>Support for 1.33x, 1.55x, 2.0x squeeze/desqueeze ratios</li>
+      <li>Auto EXIF-based rotation fix for images</li>
+      <li>Works for both portrait and landscape formats</li>
+      <li>Video output saved in <code>DCIM/Desqueezed</code> or <code>DCIM/Squeezed</code></li>
+      <li>Image output saved in <code>DCIM/Desqueezed</code></li>
+      <li>All processing done offline on your device</li>
+      <li>Free 15-day trial, one-time purchase to unlock full version</li>
+    </ul>
 
-    <section class="section">
-      <h2>Privacy & Terms</h2>
-      <p>Everything runs locally in your browser. Your images are never uploaded or stored.</p>
-    </section>
+    <h2>Privacy Policy</h2>
+    <p>
+      Squeezer does not collect or store any personal data. All processing is done entirely on your device. No login or internet connection is required.
+    </p>
+
+    <h2>Need Help?</h2>
+    <p>
+      For feedback or support:<br/>
+      📧 <strong>squeezer.support@gmail.com</strong>
+    </p>
   </div>
 
   <footer>
-    &copy; 2025 Anamorphic Desqueezer Web | For content creators & filmmakers
+    &copy; 2025 Squeezer App. All rights reserved.
   </footer>
-
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const uploadInput = document.getElementById('upload');
-    const downloadLink = document.getElementById('downloadLink');
-    const buyNow = document.getElementById('buyNow');
-    const desqueezeButtons = document.getElementById('desqueezeButtons');
-
-    let img = new Image();
-
-    uploadInput.onchange = function(e) {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
-          canvas.classList.remove('hidden');
-        }
-        img.src = event.target.result;
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
-
-    function applyDesqueeze(factor) {
-      if (!img.src) return;
-
-      const newWidth = img.width * factor;
-      const newHeight = img.height;
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      ctx.setTransform(factor, 0, 0, 1, 0, 0);
-      ctx.drawImage(img, 0, 0);
-
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-      downloadLink.href = dataUrl;
-      downloadLink.classList.remove('hidden');
-    }
-
-    function startCheckout() {
-      const stripe = Stripe("pk_live_REPLACE_WITH_YOUR_KEY");
-      stripe.redirectToCheckout({
-        lineItems: [{price: "price_REPLACE_WITH_YOUR_PRICE_ID", quantity: 1}],
-        mode: "payment",
-        successUrl: window.location.href + '?success=true',
-        cancelUrl: window.location.href
-      });
-    }
-  </script>
 </body>
 </html>
